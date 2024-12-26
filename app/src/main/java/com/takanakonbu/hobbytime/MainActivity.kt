@@ -6,11 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Assignment
+import androidx.compose.material.icons.automirrored.filled.Note
 import androidx.compose.material.icons.filled.Analytics
-import androidx.compose.material.icons.filled.Assignment
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.Note
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -42,10 +41,10 @@ fun MainScreen() {
 
     val navigationItems = listOf(
         NavigationItem("hobbies", "趣味", Icons.Default.EmojiEvents),
-        NavigationItem("activities", "活動記録", Icons.Default.Assignment),
+        NavigationItem("activities", "活動記録", Icons.AutoMirrored.Filled.Assignment),
         NavigationItem("expenses", "出費", Icons.Default.AttachMoney),
         NavigationItem("analysis", "分析", Icons.Default.Analytics),
-        NavigationItem("notes", "メモ", Icons.Default.Note)
+        NavigationItem("notes", "メモ", Icons.AutoMirrored.Filled.Note)
     )
 
     Scaffold(
