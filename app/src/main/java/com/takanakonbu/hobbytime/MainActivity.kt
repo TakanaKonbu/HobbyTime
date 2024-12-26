@@ -20,7 +20,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.takanakonbu.hobbytime.ui.screens.hobby.HobbiesScreen
 import com.takanakonbu.hobbytime.ui.theme.HobbyTimeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,25 +79,21 @@ fun MainScreen() {
                 HobbiesScreen()
             }
             composable("activities") {
-                // TODO: Implement ActivitiesScreen
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Text("活動記録画面")
                 }
             }
             composable("expenses") {
-                // TODO: Implement ExpensesScreen
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Text("出費画面")
                 }
             }
             composable("analysis") {
-                // TODO: Implement AnalysisScreen
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Text("分析画面")
                 }
             }
             composable("notes") {
-                // TODO: Implement NotesScreen
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Text("メモ画面")
                 }

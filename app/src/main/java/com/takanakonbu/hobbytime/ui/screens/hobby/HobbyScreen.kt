@@ -11,12 +11,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.takanakonbu.hobbytime.data.entity.HobbyEntity
 
 @Composable
-fun HobbiesScreen() {
+fun HobbiesScreen(
+    viewModel: HobbyViewModel = hiltViewModel()
+) {
     var showAddDialog by remember { mutableStateOf(false) }
-    var hobbies by remember { mutableStateOf(listOf<HobbyItem>()) }
-    var editingHobby by remember { mutableStateOf<HobbyItem?>(null) }
+    var editingHobby by remember { mutableStateOf<HobbyEntity?>(null) }
+    val hobbies by viewModel.hobbies.collectAsState()
 
     Scaffold(
         floatingActionButton = {
@@ -38,9 +42,7 @@ fun HobbiesScreen() {
                 HobbyCard(
                     hobby = hobby,
                     onEdit = { editingHobby = hobby },
-                    onDelete = {
-                        hobbies = hobbies.filter { it.id != hobby.id }
-                    }
+                    onDelete = { viewModel.deleteHobby(hobby) }
                 )
             }
         }
@@ -49,12 +51,7 @@ fun HobbiesScreen() {
             HobbyDialog(
                 onDismiss = { showAddDialog = false },
                 onConfirm = { name, description ->
-                    val newHobby = HobbyItem(
-                        id = (hobbies.maxOfOrNull { it.id } ?: 0) + 1,
-                        name = name,
-                        description = description
-                    )
-                    hobbies = hobbies + newHobby
+                    viewModel.addHobby(name, description)
                     showAddDialog = false
                 }
             )
@@ -65,11 +62,7 @@ fun HobbiesScreen() {
                 hobby = hobby,
                 onDismiss = { editingHobby = null },
                 onConfirm = { name, description ->
-                    hobbies = hobbies.map {
-                        if (it.id == hobby.id) {
-                            it.copy(name = name, description = description)
-                        } else it
-                    }
+                    viewModel.updateHobby(hobby.copy(name = name, description = description))
                     editingHobby = null
                 }
             )
@@ -80,7 +73,7 @@ fun HobbiesScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HobbyCard(
-    hobby: HobbyItem,
+    hobby: HobbyEntity,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -123,7 +116,7 @@ fun HobbyCard(
 
 @Composable
 fun HobbyDialog(
-    hobby: HobbyItem? = null,
+    hobby: HobbyEntity? = null,
     onDismiss: () -> Unit,
     onConfirm: (name: String, description: String) -> Unit
 ) {
@@ -160,7 +153,7 @@ fun HobbyDialog(
                     }
                 }
             ) {
-                Text("保存")
+                Text(if (hobby == null) "追加" else "更新")
             }
         },
         dismissButton = {
@@ -170,9 +163,3 @@ fun HobbyDialog(
         }
     )
 }
-
-data class HobbyItem(
-    val id: Int,
-    val name: String,
-    val description: String
-)
