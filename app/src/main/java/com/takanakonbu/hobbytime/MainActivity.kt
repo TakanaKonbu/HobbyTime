@@ -18,6 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.takanakonbu.hobbytime.ui.screens.hobby.HobbiesScreen
 import com.takanakonbu.hobbytime.ui.theme.HobbyTimeTheme
 
 class MainActivity : ComponentActivity() {
@@ -73,10 +74,7 @@ fun MainScreen() {
             modifier = Modifier.padding(paddingValues)
         ) {
             composable("hobbies") {
-                // TODO: Implement HobbiesScreen
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    Text("趣味画面")
-                }
+                HobbiesScreen()
             }
             composable("activities") {
                 // TODO: Implement ActivitiesScreen
