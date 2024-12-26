@@ -3,45 +3,111 @@ package com.takanakonbu.hobbytime
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Analytics
+import androidx.compose.material.icons.filled.Assignment
+import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.Note
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.takanakonbu.hobbytime.ui.theme.HobbyTimeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             HobbyTimeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                MainScreen()
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainScreen() {
+    val navController = rememberNavController()
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
+    val navigationItems = listOf(
+        NavigationItem("hobbies", "趣味", Icons.Default.EmojiEvents),
+        NavigationItem("activities", "活動記録", Icons.Default.Assignment),
+        NavigationItem("expenses", "出費", Icons.Default.AttachMoney),
+        NavigationItem("analysis", "分析", Icons.Default.Analytics),
+        NavigationItem("notes", "メモ", Icons.Default.Note)
+    )
+
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                navigationItems.forEach { item ->
+                    NavigationBarItem(
+                        icon = { Icon(item.icon, contentDescription = item.label) },
+                        label = { Text(item.label) },
+                        selected = currentRoute == item.route,
+                        onClick = {
+                            navController.navigate(item.route) {
+                                popUpTo(navController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
                     )
+                }
+            }
+        }
+    ) { paddingValues ->
+        NavHost(
+            navController = navController,
+            startDestination = "hobbies",
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            composable("hobbies") {
+                // TODO: Implement HobbiesScreen
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Text("趣味画面")
+                }
+            }
+            composable("activities") {
+                // TODO: Implement ActivitiesScreen
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Text("活動記録画面")
+                }
+            }
+            composable("expenses") {
+                // TODO: Implement ExpensesScreen
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Text("出費画面")
+                }
+            }
+            composable("analysis") {
+                // TODO: Implement AnalysisScreen
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Text("分析画面")
+                }
+            }
+            composable("notes") {
+                // TODO: Implement NotesScreen
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Text("メモ画面")
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    HobbyTimeTheme {
-        Greeting("Android")
-    }
-}
+data class NavigationItem(
+    val route: String,
+    val label: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector
+)
